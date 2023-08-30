@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="universityModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="course">
+    <Key>
+      <PropertyRef Name="courseid" />
+    </Key>
+    <Property Name="courseid" Type="Int32" Nullable="false" />
+    <Property Name="coursename" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="dr" Relationship="Self.FK_course_dr1" FromRole="course" ToRole="dr" />
+  </EntityType>
+  <EntityType Name="dr">
+    <Key>
+      <PropertyRef Name="drid" />
+    </Key>
+    <Property Name="drid" Type="Int32" Nullable="false" />
+    <Property Name="drname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="course" Relationship="Self.FK_course_dr1" FromRole="dr" ToRole="course" />
+  </EntityType>
+  <Association Name="FK_course_dr1">
+    <End Role="dr" Type="Self.dr" Multiplicity="1" />
+    <End Role="course" Type="Self.course" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="dr">
+        <PropertyRef Name="drid" />
+      </Principal>
+      <Dependent Role="course">
+        <PropertyRef Name="courseid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="universityEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="courses" EntityType="Self.course" />
+    <EntitySet Name="drs" EntityType="Self.dr" />
+    <AssociationSet Name="FK_course_dr1" Association="Self.FK_course_dr1">
+      <End Role="dr" EntitySet="drs" />
+      <End Role="course" EntitySet="courses" />
+    </AssociationSet>
+    <EntitySet Name="sysdiagrams" EntityType="universityModel.sysdiagram" />
+  </EntityContainer>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+</Schema>

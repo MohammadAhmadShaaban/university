@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="universityModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="course">
+    <Key>
+      <PropertyRef Name="courseid" />
+    </Key>
+    <Property Name="courseid" Type="int" Nullable="false" />
+    <Property Name="coursename" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="dr">
+    <Key>
+      <PropertyRef Name="drid" />
+    </Key>
+    <Property Name="drid" Type="int" Nullable="false" />
+    <Property Name="drname" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_course_dr1">
+    <End Role="dr" Type="Self.dr" Multiplicity="1" />
+    <End Role="course" Type="Self.course" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="dr">
+        <PropertyRef Name="drid" />
+      </Principal>
+      <Dependent Role="course">
+        <PropertyRef Name="courseid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="universityModelStoreContainer">
+    <EntitySet Name="course" EntityType="Self.course" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="dr" EntityType="Self.dr" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_course_dr1" Association="Self.FK_course_dr1">
+      <End Role="dr" EntitySet="dr" />
+      <End Role="course" EntitySet="course" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
